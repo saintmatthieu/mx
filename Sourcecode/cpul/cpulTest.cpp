@@ -47,7 +47,7 @@ void Test::run (TestResult& result )
 /// then all tests will be run.
 const std::vector<TestIdentifier> Test::runOnlyTheseTests =
 {
-    { "HasDefaultsHasAppearance", "FreezingRoundTrip.cpp" },
+    { "roundTripViolaDynamicWrongTime", "FreezingRoundTrip.cpp" },
     { "roundTripOutput", "FreezingRoundTrip.cpp" },
 };
 
@@ -74,10 +74,6 @@ bool Test::getDoRunTest() const
         {
             doRunTest = false;
         }
-    }
-    else
-    {
-        doRunTest = false;
     }
 
     return doRunTest;

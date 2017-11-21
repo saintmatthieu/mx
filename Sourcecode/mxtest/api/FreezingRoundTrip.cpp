@@ -42,6 +42,8 @@ T_END
 
 TEST( roundTripViolaDynamicWrongTime, Freezing )
 {
+    // in the original file measure number="X7" implicit="yes" width="389"
+    // or search for font-family="roundTripViolaDynamicWrongTime"
     auto& mgr = DocumentManager::getInstance();
     const auto filePath = mxtest::MxFileRepository::getFullPath( fileName );
     const auto originalId = mgr.createFromFile( filePath );
@@ -67,12 +69,15 @@ TEST( roundTripViolaDynamicWrongTime, Freezing )
         ++originalMdcIter;
     }
 
+    // this is the first note in the measure
     CHECK( originalMdcIter != originalMdcEnd );
     CHECK( MusicDataChoice::Choice::note == (*originalMdcIter)->getChoice() );
     auto originalCurrentNote = (*originalMdcIter)->getNote();
     CHECK_DOUBLES_EQUAL( 30.0, originalCurrentNote->getNoteChoice()->getNormalNoteGroup()->getDuration()->getValue().getValue(), 0.0001 );
+    currentTime += 30.0;
     CHECK( !originalCurrentNote->getNoteChoice()->getNormalNoteGroup()->getFullNoteGroup()->getHasChord() );
 
+    // this is the second note in the measure
     ++originalMdcIter;
     CHECK( originalMdcIter != originalMdcEnd );
     CHECK( MusicDataChoice::Choice::note == (*originalMdcIter)->getChoice() );
@@ -80,6 +85,7 @@ TEST( roundTripViolaDynamicWrongTime, Freezing )
     CHECK_DOUBLES_EQUAL( 30.0, originalCurrentNote->getNoteChoice()->getNormalNoteGroup()->getDuration()->getValue().getValue(), 0.0001 );
     CHECK( originalCurrentNote->getNoteChoice()->getNormalNoteGroup()->getFullNoteGroup()->getHasChord() );
 
+    // this is where we find the first pp dynamic in the measure
     ++originalMdcIter;
     CHECK( originalMdcIter != originalMdcEnd );
     CHECK( MusicDataChoice::Choice::direction == (*originalMdcIter)->getChoice() );
@@ -88,6 +94,26 @@ TEST( roundTripViolaDynamicWrongTime, Freezing )
     auto originalDynamics = originalDirection->getDirectionTypeSet().front()->getDynamicsSet().front();
     auto originalDynamicsValue = originalDynamics->getValue();
     CHECK( DynamicsEnum::pp == originalDynamicsValue.getValue() );
+    const auto& originalDirections = originalScoreData.parts.at( partIndex ).measures.at( measureIndex ).staves.at( 0 ).directions;
+    const auto originalDirectionsBegin = std::cbegin( originalDirections );
+    const auto originalDirectionsEnd = std::cend( originalDirections );
+
+    const auto findDirectionLambda = [&]( const DirectionData& inDirection )
+    {
+        if( inDirection.marks.size() == 1 )
+        {
+            const auto& mark = inDirection.marks.front();
+            if( mark.markType == MarkType::pp )
+            {
+                return true;
+            }
+        }
+
+        return false;
+    };
+
+    const auto directionIter = std::find_if( originalDirectionsBegin, originalDirectionsEnd, findDirectionLambda );
+    CHECK_DOUBLES_EQUAL( 30.0, directionIter->tickTimePosition, 0.001 );
 
     const auto& savedPart = savedScore->getPartwisePartSet().at( partIndex );
     const auto& savedMeasure = savedPart->getPartwiseMeasureSet().at( measureIndex );
