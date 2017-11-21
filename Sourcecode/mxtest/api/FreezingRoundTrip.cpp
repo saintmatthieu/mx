@@ -159,6 +159,27 @@ TEST( HasDefaultsHasAppearance, Freezing )
     const auto originalHasAppearance = originalScore->getScoreHeaderGroup()->getDefaults()->getHasAppearance();
     const auto savedHasAppearance = savedScore->getScoreHeaderGroup()->getDefaults()->getHasAppearance();
     CHECK( originalHasAppearance == savedHasAppearance );
+
+    const auto originalAppearance = originalScore->getScoreHeaderGroup()->getDefaults()->getAppearance();
+    const auto savedAppearance = savedScore->getScoreHeaderGroup()->getDefaults()->getAppearance();
+
+    for( size_t i = 0; i < originalAppearance->getLineWidthSet().size(); ++i )
+    {
+        CHECK_DOUBLES_EQUAL( originalAppearance->getLineWidthSet().at( i )->getValue().getValue(), savedAppearance->getLineWidthSet().at( i )->getValue().getValue(), 0.0001 );
+        CHECK( originalAppearance->getLineWidthSet().at( i )->getAttributes()->type.getValueString() == savedAppearance->getLineWidthSet().at( i )->getAttributes()->type.getValueString() );
+    }
+
+    for( size_t i = 0; i < originalAppearance->getNoteSizeSet().size(); ++i )
+    {
+        CHECK_DOUBLES_EQUAL( originalAppearance->getNoteSizeSet().at( i )->getValue().getValue(), savedAppearance->getNoteSizeSet().at( i )->getValue().getValue(), 0.0001 );
+        CHECK( originalAppearance->getNoteSizeSet().at( i )->getAttributes()->type == savedAppearance->getNoteSizeSet().at( i )->getAttributes()->type );
+    }
+
+    for( size_t i = 0; i < originalAppearance->getDistanceSet().size(); ++i )
+    {
+        CHECK_DOUBLES_EQUAL( originalAppearance->getDistanceSet().at( i )->getValue().getValue(), savedAppearance->getDistanceSet().at( i )->getValue().getValue(), 0.0001 );
+        CHECK( originalAppearance->getDistanceSet().at( i )->getAttributes()->type.getValueString() == savedAppearance->getDistanceSet().at( i )->getAttributes()->type.getValueString() );
+    }
 }
 
 TEST( appearanceLineWidths, Freezing )
