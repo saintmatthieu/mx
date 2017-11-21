@@ -133,7 +133,10 @@ TEST( missingMusicXMLVersion, Freezing )
     mgr.destroyDocument( originalId );
     mgr.destroyDocument( savedId );
 
-    CHECK( originalScore->getAttributes()->hasVersion == savedScore->getAttributes()->hasVersion );
+    const bool originalScoreHasVersion = originalScore->getAttributes()->hasVersion;
+    const bool savedScoreHasVersion = savedScore->getAttributes()->hasVersion;
+    CHECK( originalScoreHasVersion );
+    CHECK( savedScoreHasVersion );
 }
 
 TEST( HasDefaultsHasAppearance, Freezing )
