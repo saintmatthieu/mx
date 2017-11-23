@@ -503,13 +503,6 @@
 	},
 	"buffers":
 	[
-		{
-			"settings":
-			{
-				"buffer_size": 0,
-				"line_ending": "Unix"
-			}
-		}
 	],
 	"build_system": "",
 	"build_system_choices":
@@ -548,10 +541,19 @@
 	},
 	"expanded_folders":
 	[
-		"/Users/mjb/MxRepo"
+		"/Users/mjb/MxRepo",
+		"/Users/mjb/MxRepo/Sublime"
 	],
 	"file_history":
 	[
+		"/Users/mjb/MxRepo/Documents/musicxml.xsd",
+		"/Users/mjb/MxRepo/Sourcecode/mx/core/elements/ScoreHeaderGroup.h",
+		"/Users/mjb/MxRepo/Sourcecode/mx/core/elements/Appearance.h",
+		"/Users/mjb/MxRepo/Sourcecode/mx/core/elements/Tenths.h",
+		"/Users/mjb/MxRepo/Sourcecode/mx/core/elements/OtherAppearance.h",
+		"/Users/mjb/MxRepo/Resources/mjbsuite/freezing.xml",
+		"/Users/mjb/MxRepo/Sourcecode/mx/api/MarkData.h",
+		"/Users/mjb/MxRepo/Sublime/mx.sublime-project",
 		"/Users/mjb/Library/Developer/Xcode/Templates/File Templates/Source/Mx Api C++ File.xctemplate/WithHeader/___FILEBASENAME___.h",
 		"/Users/mjb/Library/Developer/Xcode/Templates/File Templates/Source/Mx Api C++ File.xctemplate/WithHeader/___FILEBASENAME___.cpp",
 		"/Users/mjb/Library/Developer/Xcode/Templates/File Templates/Source/Mx Api C++ File.xctemplate/Default/___FILEBASENAME___.cpp",
@@ -631,7 +633,6 @@
 		"/Users/mjb/iqreq/vendor/bundle/ruby/2.4.0/gems/rails-dom-testing-2.0.3/lib/rails/dom/testing/assertions/selector_assertions/count_describable.rb",
 		"/Users/mjb/iqreq/app/models/paragraph.rb",
 		"/Users/mjb/iqreq/data/40 bus.txt",
-		"/Users/mjb/MxRepo/Documents/musicxml.xsd",
 		"/Users/mjb/.bashrc",
 		"/Users/mjb/.bash_profile",
 		"/Users/mjb/iqreq/config/environment.rb",
@@ -672,14 +673,7 @@
 		"/Users/mjb/iqreq/app/views/test_page/test.html.erb",
 		"/Users/mjb/iqreq/app/controllers/test_page_controller.rb",
 		"/Users/mjb/iqreq/db/migrate/20170923224536_database_test_migration.rb",
-		"/Users/mjb/iqreq/db/migrate/20170923224746_delete_test_table.rb",
-		"/Users/mjb/iqreq/db/migrate/20170923225036_create_requirements.rb",
-		"/Users/mjb/iqreq/db/migrate/20170923225118_create_groups.rb",
-		"/Users/mjb/iqreq/db/migrate/20170923225126_create_documents.rb",
-		"/Users/mjb/iqreq/db/migrate/20170923225133_create_epics.rb",
-		"/Users/mjb/iqreq/db/migrate/20170923225216_rename_document_title.rb",
-		"/Users/mjb/iqreq/db/migrate/20170923225227_rename_requirement_type.rb",
-		"/Users/mjb/iqreq/db/migrate/20170923225234_rename_requirement_field.rb"
+		"/Users/mjb/iqreq/db/migrate/20170923224746_delete_test_table.rb"
 	],
 	"find":
 	{
@@ -697,6 +691,20 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"\">",
+			"name=\"print-style-align\"",
+			"\"print-style-align\"",
+			"\"direction\"",
+			"\"directive\"",
+			"\"direction\"",
+			"\"measure\"",
+			"measure number=\"X",
+			"measure number=\"X7\"",
+			"<measure number=\"X7\" implicit=\"yes\" width=\"389\">",
+			"distance-type",
+			"\"line-width-type\"",
+			"\"line-width\"",
+			"line-width"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -714,36 +722,8 @@
 	"groups":
 	[
 		{
-			"selected": 0,
 			"sheets":
 			[
-				{
-					"buffer": 0,
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 0,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								0,
-								0
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Text/Plain text.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 0,
-					"type": "text"
-				}
 			]
 		}
 	],
@@ -799,6 +779,38 @@
 		"last_filter": "",
 		"selected_items":
 		[
+			[
+				"markdata",
+				"Sourcecode/mx/api/MarkData.h"
+			],
+			[
+				"musicxml.xsd",
+				"Documents/musicxml.xsd"
+			],
+			[
+				"freezing",
+				"Resources/mjbsuite/freezing.xml"
+			],
+			[
+				"othera",
+				"Sourcecode/mx/core/elements/OtherAppearance.h"
+			],
+			[
+				"tenths.",
+				"Sourcecode/mx/core/elements/Tenths.h"
+			],
+			[
+				"appearance",
+				"Sourcecode/mx/core/elements/Appearance.h"
+			],
+			[
+				"scoreheader",
+				"Sourcecode/mx/core/elements/ScoreHeaderGroup.h"
+			],
+			[
+				"music",
+				"Documents/musicxml.xsd"
+			],
 			[
 				"req",
 				"data/requirements.xml"
@@ -1278,38 +1290,6 @@
 			[
 				"admin_u",
 				"app/models/admin_user.rb"
-			],
-			[
-				"admin_user.rb",
-				"app/models/admin_user.rb"
-			],
-			[
-				"admin.",
-				"app/assets/stylesheets/admin.css"
-			],
-			[
-				"_form",
-				"app/views/sections/_form.html.erb"
-			],
-			[
-				"subject.",
-				"app/models/subject.rb"
-			],
-			[
-				"subjects_c",
-				"app/controllers/subjects_controller.rb"
-			],
-			[
-				"sections_",
-				"app/controllers/sections_controller.rb"
-			],
-			[
-				"index",
-				"app/views/pages/index.html.erb"
-			],
-			[
-				"pages_",
-				"app/controllers/pages_controller.rb"
 			]
 		],
 		"width": 0.0

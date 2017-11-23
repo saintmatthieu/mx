@@ -25,6 +25,20 @@ namespace
     constexpr const char* const fileName = "freezing.xml";
 }
 
+TEST( minimalistRoundTripForChordDirectionPlacement, Freezing )
+{
+    const auto scoreData = mxtest::MxFileRepository::loadFile( "ChordDirectionPlacement.xml" );
+    const auto filePath = mxtest::MxFileRepository::getFullPath( "ChordDirectionPlacement.xml" );
+    auto& docMgr = DocumentManager::getInstance();
+    const auto docId = docMgr.createFromFile( filePath );
+    docMgr.writeToFile( docId, "./ChordDirectionPlacement_before.xml" );
+    docMgr.destroyDocument( docId );
+    const auto apiDocId = docMgr.createFromScore( scoreData );
+    docMgr.writeToFile( apiDocId, "./ChordDirectionPlacement_after.xml" );
+    docMgr.destroyDocument( apiDocId );
+}
+T_END
+
 
 TEST( roundTripOutput, Freezing )
 {
@@ -74,7 +88,6 @@ TEST( roundTripViolaDynamicWrongTime, Freezing )
     CHECK( MusicDataChoice::Choice::note == (*originalMdcIter)->getChoice() );
     auto originalCurrentNote = (*originalMdcIter)->getNote();
     CHECK_DOUBLES_EQUAL( 30.0, originalCurrentNote->getNoteChoice()->getNormalNoteGroup()->getDuration()->getValue().getValue(), 0.0001 );
-    currentTime += 30.0;
     CHECK( !originalCurrentNote->getNoteChoice()->getNormalNoteGroup()->getFullNoteGroup()->getHasChord() );
 
     // this is the second note in the measure

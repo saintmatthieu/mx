@@ -47,8 +47,9 @@ void Test::run (TestResult& result )
 /// then all tests will be run.
 const std::vector<TestIdentifier> Test::runOnlyTheseTests =
 {
-    { "roundTripViolaDynamicWrongTime", "FreezingRoundTrip.cpp" },
-    { "roundTripOutput", "FreezingRoundTrip.cpp" },
+//    { "roundTripViolaDynamicWrongTime", "FreezingRoundTrip.cpp" },
+//    { "roundTripOutput", "FreezingRoundTrip.cpp" },
+    { "minimalistRoundTripForChordDirectionPlacement", "FreezingRoundTrip.cpp" },
 };
 
 bool Test::getDoRunTest() const

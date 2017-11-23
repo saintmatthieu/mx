@@ -333,11 +333,17 @@ namespace mx
                     writeDirections( directionIter, directionEnd, noteIter, std::cbegin(voice.second.notes), noteEnd );
                 }
 
-                mx::api::NoteData noteForOutsideOfLoop;
+//                mx::api::NoteData noteForOutsideOfLoop;
 
                 for( ; noteIter != noteEnd; ++noteIter )
                 {
                     bool isStartOfChord = false;
+
+                    // if we are in a chord, and the next note is part of the same chord, then the next note is NOT independent
+                    // if we are in a chord, and the next note is NOT part of the same chord, then the next note IS independent
+                    // if we are NOT in a chord, then the next note IS independent
+                    bool isNextNoteIndependent = true;
+
                     myHistory.setChord( noteIter->isChord );
                     const auto& apiNote = *noteIter;
                     writeForwardOrBackupIfNeeded( apiNote );
@@ -353,6 +359,20 @@ namespace mx
                         {
                             isStartOfChord = true;
                         }
+
+                        const auto localNextNoteIter = noteIter + 1;
+
+                        if( localNextNoteIter != noteEnd )
+                        {
+                            if( localNextNoteIter->isChord )
+                            {
+                                if( localNextNoteIter->tickTimePosition == currentChordTickPosition )
+                                {
+                                    isNextNoteIndependent = false;
+                                }
+                            }
+                        }
+
                         previousChordTickPosition = currentChordTickPosition;
                     }
 
@@ -387,7 +407,13 @@ namespace mx
                         maxDirectionTime = nextNote->tickTimePosition;
                     }
 
-                    writeDirections( directionIter, directionEnd, noteIter, std::cbegin(voice.second.notes), noteEnd );
+                    // TODO - determine if we are in the middle of an ongoing chord,
+                    // do not write directions if we are in the middle of an ongoing
+                    // chord.  instead wait until the chord is done.
+//                    if( isNextNoteIndependent )
+                    {
+                        writeDirections( directionIter, directionEnd, noteIter, std::cbegin(voice.second.notes), noteEnd );
+                    }
 
                     auto mdc = core::makeMusicDataChoice();
                     mdc->setChoice( core::MusicDataChoice::Choice::note );
