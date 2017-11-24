@@ -582,8 +582,10 @@ namespace mx
             const bool isNotesEnd = inNoteIter == inNotesEnd;
             const bool isLastNote = !isNotesEnd && ( inNoteIter + 1 == inNotesEnd );
             const bool isFirstNote = !isLastNote && !isNotesEnd && ( inNoteIter == inNotesBegin );
-//            const auto previousNote = isFirstNote ? inNoteEnd : ( inNoteIter - 1 );
+            const auto previousNote = isFirstNote ? inNotesEnd : ( inNoteIter - 1 );
             const auto nextNote = ( isLastNote || isNotesEnd ) ? inNotesEnd : ( inNoteIter + 1 );
+            const bool isTickTimeSameAsPreviousNote = ( isFirstNote || isNotesEnd ) ? false : ( inNoteIter->tickTimePosition == previousNote->tickTimePosition );
+            const bool isIndependentNote = !isTickTimeSameAsPreviousNote;
 
             if( isFirstNote )
             {
@@ -609,7 +611,7 @@ namespace mx
                 const bool isLastNoteOfChord = !isNotesEnd && !isLastNote && ( inNoteIter->isChord && inNoteIter->tickTimePosition != nextNote->tickTimePosition );
                 const bool isChord = !isNotesEnd && inNoteIter->isChord;
 
-                if (isChord && !isLastNoteOfChord)
+                if( isChord && !isLastNoteOfChord && !isIndependentNote )
                 {
                     myHistory.log( "note writing any directions because we are in the midst of a chord" );
                     return;

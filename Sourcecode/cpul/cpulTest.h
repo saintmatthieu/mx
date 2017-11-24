@@ -204,7 +204,7 @@ private:
 {                                                                     \
     if (!(bOoLeAn))                                                   \
     {                                                                 \
-        rEsUlT_.addFailure (Failure (mEsSaGe, __FILE__, __LINE__));  \
+        rEsUlT_.addFailure (Failure (mEsSaGe, __FILE__, __LINE__));   \
         return;                                                       \
     }                                                                 \
 }                                                                     \

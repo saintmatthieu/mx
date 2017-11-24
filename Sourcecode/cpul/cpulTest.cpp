@@ -49,7 +49,8 @@ const std::vector<TestIdentifier> Test::runOnlyTheseTests =
 {
 //    { "roundTripViolaDynamicWrongTime", "FreezingRoundTrip.cpp" },
 //    { "roundTripOutput", "FreezingRoundTrip.cpp" },
-    { "minimalistRoundTripForChordDirectionPlacement", "FreezingRoundTrip.cpp" },
+//    { "roundTripChordDirFile", "FreezingRoundTrip.cpp" },
+//    { "chordDirectionPlacement", "FreezingRoundTrip.cpp" },
 };
 
 bool Test::getDoRunTest() const

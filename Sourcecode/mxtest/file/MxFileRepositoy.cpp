@@ -36,6 +36,13 @@ namespace mxtest
         const auto& instance = getInstance();
         return instance.myPath + subDir + instance.mySeparator + fileName;
     }
+
+
+    const std::string MxFileRepository::getNameWithoutExtension( const std::string& fileName )
+    {
+        const auto lastDot = fileName.find_last_of( '.' );
+        return fileName.substr( 0, lastDot - 1 );
+    }
     
     
     const std::string& MxFileRepository::getSubdirectory( const std::string& fileName )
