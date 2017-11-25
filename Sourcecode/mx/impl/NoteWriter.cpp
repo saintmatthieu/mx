@@ -164,6 +164,7 @@ namespace mx
 
                     if( tickTimeDistance > 0 && tupletStart.normalNumber != 0 && tupletStart.actualNumber != 0 )
                     {
+                        // calculate the tuplet normal type and dots based on the distance between start and stop and the ratio
                         const long double normalLength = static_cast<long double>( tickTimeDistance ) / static_cast<long double>( tupletStart.normalNumber );
 
                         mx::api::DurationName normalName = mx::api::DurationName::unspecified;
@@ -182,24 +183,9 @@ namespace mx
 
 
                 }
-                // calculate the tuplet normal type and dots based on the distance between start and stop and the ratio
 
-//                if ( myNoteData.durationData.timeModificationNormalType != api::DurationName::unspecified )
-//                {
-//                    timeMod->setHasNormalTypeNormalDotGroup(true);
-//                    timeMod->getNormalTypeNormalDotGroup()->getNormalType()->setValue( myConverter.convert( myNoteData.durationData.timeModificationNormalType ) );
-//
-//                    for( int i = 0; i < myNoteData.durationData.timeModificationNormalTypeDots; ++i )
-//                    {
-//                        timeMod->getNormalTypeNormalDotGroup()->addNormalDot( core::makeNormalDot() );
-//                    }
-//                }
-//                else
-//                {
-//
-//                    // TODO - detect if the note type does not equal the tuplet type and automatically write what is needed here.
-//                }
-
+                // TODO - decide what happens if the user entered specific tuplet type in the
+                // duration data, possibly remove those fields from duration data.
             }
 
             return myOutNote;
