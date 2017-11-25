@@ -213,7 +213,8 @@ TEST( roundTripViolaDynamicWrongTime, Freezing )
     };
 
     const auto directionIter = std::find_if( originalDirectionsBegin, originalDirectionsEnd, findDirectionLambda );
-    CHECK_DOUBLES_EQUAL( 30.0, directionIter->tickTimePosition, 0.001 );
+    const double tickTimeScaleFactor = 2.0;
+    CHECK_DOUBLES_EQUAL( 30.0 * tickTimeScaleFactor, directionIter->tickTimePosition, 0.001 );
 
     const auto& savedPart = savedScore->getPartwisePartSet().at( partIndex );
     const auto& savedMeasure = savedPart->getPartwiseMeasureSet().at( measureIndex );
@@ -224,14 +225,14 @@ TEST( roundTripViolaDynamicWrongTime, Freezing )
     CHECK( savedMdcIter != savedMdcEnd );
     CHECK( MusicDataChoice::Choice::note == (*savedMdcIter)->getChoice() );
     auto savedCurrentNote = (*savedMdcIter)->getNote();
-    CHECK_DOUBLES_EQUAL( 30.0, savedCurrentNote->getNoteChoice()->getNormalNoteGroup()->getDuration()->getValue().getValue(), 0.0001 );
+    CHECK_DOUBLES_EQUAL( 30.0 * tickTimeScaleFactor, savedCurrentNote->getNoteChoice()->getNormalNoteGroup()->getDuration()->getValue().getValue(), 0.0001 );
     CHECK( !savedCurrentNote->getNoteChoice()->getNormalNoteGroup()->getFullNoteGroup()->getHasChord() );
 
     ++savedMdcIter;
     CHECK( savedMdcIter != savedMdcEnd );
     CHECK( MusicDataChoice::Choice::note == (*savedMdcIter)->getChoice() );
     savedCurrentNote = (*savedMdcIter)->getNote();
-    CHECK_DOUBLES_EQUAL( 30.0, savedCurrentNote->getNoteChoice()->getNormalNoteGroup()->getDuration()->getValue().getValue(), 0.0001 );
+    CHECK_DOUBLES_EQUAL( 30.0 * tickTimeScaleFactor, savedCurrentNote->getNoteChoice()->getNormalNoteGroup()->getDuration()->getValue().getValue(), 0.0001 );
     CHECK( savedCurrentNote->getNoteChoice()->getNormalNoteGroup()->getFullNoteGroup()->getHasChord() );
 
     ++savedMdcIter;
