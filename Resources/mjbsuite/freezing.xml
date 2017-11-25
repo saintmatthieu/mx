@@ -21267,7 +21267,7 @@ Note: None of the percussion instruments may be shared
         <voice>1</voice>
         <type>16th</type>
       </note>
-      <note default-x="167">
+      <note default-x="167" font-family="checkMissingNormalType">
         <pitch>
           <step>B</step>
           <octave>4</octave>

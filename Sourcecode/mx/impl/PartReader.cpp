@@ -81,6 +81,7 @@ namespace mx
                 MeasureReader reader{ mxMeasure, currentCursor, previousCursor };
                 auto measureData = reader.getMeasureData();
                 currentCursor.timeSignature = measureData.timeSignature;
+                currentCursor.ticksPerQuarter = reader.getCursor().ticksPerQuarter;
                 myOutPartData.measures.emplace_back( std::move( measureData ) );
                 ++currentCursor.measureIndex;
                 previousCursor = currentCursor;

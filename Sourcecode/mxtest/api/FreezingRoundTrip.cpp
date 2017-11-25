@@ -27,6 +27,7 @@ namespace
     constexpr const char* const chordDirFile = "ChordDirectionPlacement.xml";
     constexpr const char* const hasVerFile = "HasMusicXmlVersionTrue.xml";
     constexpr const char* const noVerFile = "HasMusicXmlVersionFalse.xml";
+    constexpr const char* const tupletType = "PreserveTimeModificationNormalType.xml";
 }
 
 namespace
@@ -426,6 +427,67 @@ TEST( appearancDistance, Freezing )
 
         CHECK( originalElement->getAttributes()->hasType == savedElement->getAttributes()->hasType );
         CHECK( originalElement->getAttributes()->type.getValueString() == savedElement->getAttributes()->type.getValueString() );
+    }
+}
+
+TEST( checkMissingNormalTypeSimple, Freezing )
+{
+    const auto testData = getTestData( tupletType );
+    const auto musicData = testData.getMusicData( 0, 0 );
+    CHECK( musicData.second.at( 1 )->getNote()->getTimeModification()->getHasNormalTypeNormalDotGroup() );
+    CHECK( mx::core::NoteTypeValue::eighth == musicData.second.at( 1 )->getNote()->getTimeModification()->getNormalTypeNormalDotGroup()->getNormalType()->getValue() );
+}
+
+TEST( checkMissingNormalType, Freezing )
+{
+    const auto testData = getTestData( freezingFile );
+    const auto partCount = testData.originalScore->getPartwisePartSet().size();
+
+    for( size_t partIndex = 0; partIndex < partCount; ++partIndex )
+    {
+        const auto measureCount = testData.originalScore->getPartwisePartSet().at( partIndex )->getPartwiseMeasureSet().size();
+
+        for( size_t measureIndex = 0; measureIndex < measureCount; ++measureIndex )
+        {
+            const auto music = testData.getMusicData( static_cast<int>( partIndex ), static_cast<int>( measureIndex ) );
+
+            const auto filterLambda = [&]( const mx::core::MusicDataChoicePtr& inMdc )
+            {
+                if( inMdc->getChoice() != mx::core::MusicDataChoice::Choice::note )
+                {
+                    return false;
+                }
+
+                const auto& note = inMdc->getNote();
+
+                if( !note->getHasTimeModification() )
+                {
+                    return false;
+                }
+
+                const auto& tm = note->getTimeModification();
+
+                if( !tm->getHasNormalTypeNormalDotGroup() )
+                {
+                    return false;
+                }
+
+                return true;
+            };
+
+            MusicDataChoiceSet originalNotes;
+            MusicDataChoiceSet savedNotes;
+            std::copy_if( std::cbegin( music.first ), std::cend( music.first ), std::back_inserter( originalNotes ), filterLambda );
+            std::copy_if( std::cbegin( music.second ), std::cend( music.second ), std::back_inserter( savedNotes ), filterLambda );
+            CHECK_EQUAL( originalNotes.size(), savedNotes.size() );
+            const size_t numNotes = originalNotes.size();
+            for( int i = 0; i < numNotes; ++i )
+            {
+                const auto originalType = originalNotes.at( i )->getNote()->getTimeModification()->getNormalTypeNormalDotGroup()->getNormalType()->getValue();
+                const auto savedType = savedNotes.at( i )->getNote()->getTimeModification()->getNormalTypeNormalDotGroup()->getNormalType()->getValue();
+                CHECK( originalType == savedType );
+            }
+        }
     }
 }
 
