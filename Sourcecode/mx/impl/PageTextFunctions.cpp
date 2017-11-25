@@ -82,8 +82,6 @@ namespace mx
                     const auto& t = *creditTypeSet.cbegin();
                     pageText.description = t->getValue().getValue();
                 }
-                
-//                pageText.positionData = getPositionData( *attr );
 
                 outPageTextItems.push_back( pageText );
             }
