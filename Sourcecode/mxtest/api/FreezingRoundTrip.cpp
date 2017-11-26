@@ -480,13 +480,26 @@ TEST( checkMissingNormalType, Freezing )
             MusicDataChoiceSet savedNotes;
             std::copy_if( std::cbegin( music.first ), std::cend( music.first ), std::back_inserter( originalNotes ), filterLambda );
             std::copy_if( std::cbegin( music.second ), std::cend( music.second ), std::back_inserter( savedNotes ), filterLambda );
-            CHECK_EQUAL( originalNotes.size(), savedNotes.size() );
+            {
+                std::stringstream message1;
+                message1 << "( originalNotes.size() <= savedNotes.size() ), ";
+                message1 << "( " << originalNotes.size() << " <= " << savedNotes.size() << " ), ";
+                message1 << " partIndex = " << partIndex << ", measureIndex = " << measureIndex;
+                CHECK_WITH_MESSAGE( originalNotes.size() <= savedNotes.size(), message1.str() );
+            }
             const size_t numNotes = originalNotes.size();
             for( int i = 0; i < numNotes; ++i )
             {
-                const auto originalType = originalNotes.at( i )->getNote()->getTimeModification()->getNormalTypeNormalDotGroup()->getNormalType()->getValue();
-                const auto savedType = savedNotes.at( i )->getNote()->getTimeModification()->getNormalTypeNormalDotGroup()->getNormalType()->getValue();
-                CHECK( originalType == savedType );
+                if( originalNotes.at( i )->getNote()->getTimeModification()->getHasNormalTypeNormalDotGroup() )
+                {
+                    const auto originalType = originalNotes.at( i )->getNote()->getTimeModification()->getNormalTypeNormalDotGroup()->getNormalType()->getValue();
+                    const auto savedType = savedNotes.at( i )->getNote()->getTimeModification()->getNormalTypeNormalDotGroup()->getNormalType()->getValue();
+                    std::stringstream message2;
+                    message2 << "( originalType == savedType ), ";
+                    message2 << "( " << static_cast<int>( originalType ) << " == " << static_cast<int>( savedType ) << " ), ";
+                    message2 << " partIndex = " << partIndex << ", measureIndex = " << measureIndex;
+                    CHECK_WITH_MESSAGE( originalType == savedType, message2.str() );
+                }
             }
         }
     }

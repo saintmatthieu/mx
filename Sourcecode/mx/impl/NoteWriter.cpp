@@ -139,22 +139,35 @@ namespace mx
                     }
                 }
 
+                if( !isTupletStartFound )
+                {
+                    MX_DEBUG_THROW( "tupletStart was not found" );
+                }
+
                 // find the tuplet stop note and TupletStop object
                 bool isTupletStopFound = false;
-                int tupletStopIndex = myNoteIndex;
+                int tupletStopIndex = tupletStartIndex;
                 mx::api::NoteData tupletStopNote{};
                 mx::api::TupletStop tupletStop{};
 
-                for( ; tupletStopIndex < static_cast<int>( mySiblingNotes.size() ); ++tupletStopIndex )
+                if( isTupletStartFound )
                 {
-                    const auto& siblingNote = mySiblingNotes.at( static_cast<size_t>( tupletStopIndex ) );
-                    if( siblingNote.noteAttachmentData.tupletStops.size() == 1 )
+                    for( ; tupletStopIndex < static_cast<int>( mySiblingNotes.size() ); ++tupletStopIndex )
                     {
-                        isTupletStopFound = true;
-                        tupletStopNote = siblingNote;
-                        tupletStop = siblingNote.noteAttachmentData.tupletStops.at( 0 );
-                        break;
+                        const auto& siblingNote = mySiblingNotes.at( static_cast<size_t>( tupletStopIndex ) );
+                        if( siblingNote.noteAttachmentData.tupletStops.size() == 1 )
+                        {
+                            isTupletStopFound = true;
+                            tupletStopNote = siblingNote;
+                            tupletStop = siblingNote.noteAttachmentData.tupletStops.at( 0 );
+                            break;
+                        }
                     }
+                }
+
+                if( !isTupletStopFound )
+                {
+                    MX_DEBUG_THROW( "tupletStop was not found" );
                 }
 
                 // calculate the distance between the two
@@ -169,7 +182,8 @@ namespace mx
 
                         mx::api::DurationName normalName = mx::api::DurationName::unspecified;
                         int normalDots = 0;
-                        if( this->findNormalNameAndDots( normalName, normalDots, normalLength ) )
+                        const bool isNormalNameAndDotsFound = this->findNormalNameAndDots( normalName, normalDots, normalLength );
+                        if( isNormalNameAndDotsFound )
                         {
                             timeMod->setHasNormalTypeNormalDotGroup(true);
                             timeMod->getNormalTypeNormalDotGroup()->getNormalType()->setValue( myConverter.convert( normalName ) );
@@ -179,13 +193,28 @@ namespace mx
                                 timeMod->getNormalTypeNormalDotGroup()->addNormalDot( mx::core::makeNormalDot() );
                             }
                         }
+                        else
+                        {
+                           // MX_DEBUG_THROW( "this->findNormalNameAndDots could not find what it was looking for" );
+                        }
                     }
-
-
+                    else
+                    {
+                        MX_DEBUG_THROW( "one of these things was not true ( tickTimeDistance > 0 && tupletStart.normalNumber != 0 && tupletStart.actualNumber != 0 )" );
+                    }
+                }
+                else
+                {
+                    MX_DEBUG_THROW( "one of these things was not true ( isTupletStartFound && isTupletStopFound )" );
                 }
 
                 // TODO - decide what happens if the user entered specific tuplet type in the
                 // duration data, possibly remove those fields from duration data.
+            }
+            else
+            {
+//                const auto insanityMessage = "this insanity returned false ( ( myNoteData.durationData.timeModificationNormalNotes > 0 && myNoteData.durationData.timeModificationActualNotes > 0 && (    myNoteData.durationData.timeModificationNormalNotes > 1 || myNoteData.durationData.timeModificationActualNotes > 1 ) ))";
+//                std::cout << insanityMessage << std::endl;
             }
 
             return myOutNote;

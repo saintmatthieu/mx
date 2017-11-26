@@ -52,7 +52,7 @@ const std::vector<TestIdentifier> Test::runOnlyTheseTests =
 //    { "checkMissingNormalType", "FreezingRoundTrip.cpp" },
 //    { "checkMissingNormalTypeSimple", "FreezingRoundTrip.cpp" },
 //    { "chordDirectionPlacement", "FreezingRoundTrip.cpp" },
-//    { "hasVersion", "FreezingRoundTrip.cpp" },
+    { "checkMissingNormalType", "FreezingRoundTrip.cpp" },
 };
 
 bool Test::getDoRunTest() const
