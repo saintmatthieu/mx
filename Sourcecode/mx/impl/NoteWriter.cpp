@@ -211,11 +211,6 @@ namespace mx
                 // TODO - decide what happens if the user entered specific tuplet type in the
                 // duration data, possibly remove those fields from duration data.
             }
-            else
-            {
-//                const auto insanityMessage = "this insanity returned false ( ( myNoteData.durationData.timeModificationNormalNotes > 0 && myNoteData.durationData.timeModificationActualNotes > 0 && (    myNoteData.durationData.timeModificationNormalNotes > 1 || myNoteData.durationData.timeModificationActualNotes > 1 ) ))";
-//                std::cout << insanityMessage << std::endl;
-            }
 
             return myOutNote;
         }
