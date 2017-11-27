@@ -195,7 +195,7 @@ namespace mx
                         }
                         else
                         {
-                           MX_DEBUG_THROW( "this->findNormalNameAndDots could not find what it was looking for" );
+                           MX_DEBUG_THROW( "this->findNormalNameAndDots could not find what it was looking for. This probably means that the file has a badly specified tuplet." );
                         }
                     }
                     else
