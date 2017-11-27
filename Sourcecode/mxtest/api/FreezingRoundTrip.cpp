@@ -467,12 +467,6 @@ TEST( checkMissingNormalType, Freezing )
                 }
 
                 const auto& tm = note->getTimeModification();
-
-                if( !tm->getHasNormalTypeNormalDotGroup() )
-                {
-                    return false;
-                }
-
                 return true;
             };
 
@@ -482,23 +476,29 @@ TEST( checkMissingNormalType, Freezing )
             std::copy_if( std::cbegin( music.second ), std::cend( music.second ), std::back_inserter( savedNotes ), filterLambda );
             {
                 std::stringstream message1;
-                message1 << "( originalNotes.size() <= savedNotes.size() ), ";
-                message1 << "( " << originalNotes.size() << " <= " << savedNotes.size() << " ), ";
+                message1 << "( originalNotes.size() == savedNotes.size() ), ";
+                message1 << "( " << originalNotes.size() << " == " << savedNotes.size() << " ), ";
                 message1 << " partIndex = " << partIndex << ", measureIndex = " << measureIndex;
-                CHECK_WITH_MESSAGE( originalNotes.size() <= savedNotes.size(), message1.str() );
+                CHECK_WITH_MESSAGE( originalNotes.size() == savedNotes.size(), message1.str() );
             }
             const size_t numNotes = originalNotes.size();
             for( int i = 0; i < numNotes; ++i )
             {
+                CHECK( savedNotes.at( i )->getNote()->getTimeModification()->getHasNormalTypeNormalDotGroup() );
+                
                 if( originalNotes.at( i )->getNote()->getTimeModification()->getHasNormalTypeNormalDotGroup() )
                 {
                     const auto originalType = originalNotes.at( i )->getNote()->getTimeModification()->getNormalTypeNormalDotGroup()->getNormalType()->getValue();
                     const auto savedType = savedNotes.at( i )->getNote()->getTimeModification()->getNormalTypeNormalDotGroup()->getNormalType()->getValue();
-                    std::stringstream message2;
-                    message2 << "( originalType == savedType ), ";
-                    message2 << "( " << static_cast<int>( originalType ) << " == " << static_cast<int>( savedType ) << " ), ";
-                    message2 << " partIndex = " << partIndex << ", measureIndex = " << measureIndex;
-                    CHECK_WITH_MESSAGE( originalType == savedType, message2.str() );
+                    
+                    if( originalType != savedType )
+                    {
+                        std::stringstream message2;
+                        message2 << "( originalType == savedType ), ";
+                        message2 << "( " << mx::core::toString( originalType ) << " == " << mx::core::toString( savedType ) << " ), ";
+                        message2 << " partIndex = " << partIndex << ", measureIndex = " << measureIndex;
+                        CHECK_WITH_MESSAGE( originalType == savedType, message2.str() );
+                    }
                 }
             }
         }
