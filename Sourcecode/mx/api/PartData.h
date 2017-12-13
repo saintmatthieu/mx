@@ -80,6 +80,17 @@ namespace mx
             SoundID soundID;
             SoloOrEnsemble soloOrEnsemble;
             MidiData midiData;
+
+            InstrumentData()
+            : uniqueId{}
+            , name{}
+            , abbreviation{}
+            , soundID{ SoundID::unspecified }
+            , soloOrEnsemble{ SoloOrEnsemble::unspecified }
+            , midiData{}
+            {
+                
+            }
         };
         
         class PartData
