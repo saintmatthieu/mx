@@ -141,6 +141,29 @@ namespace mx
                 
                 return numStaves;
             }
+
+            inline int getMaxVoice() const
+            {
+                int maxVoice = 0;
+
+                for( const auto& measure : measures )
+                {
+                    for( const auto& staff : measure.staves )
+                    {
+                        for( const auto& voice : staff.voices )
+                        {
+                            int temp = static_cast<int>( voice.first );
+                            if( temp > maxVoice )
+                            {
+                                maxVoice = temp;
+                            }
+                        }
+
+                    }
+                }
+
+                return maxVoice;
+            }
         };
 
         MXAPI_EQUALS_BEGIN( MidiData )
