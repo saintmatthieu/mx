@@ -7,6 +7,7 @@
 #include "mx/api/DocumentManager.h"
 
 #include <fstream>
+#include <algorithm>
 
 namespace mxtest
 {
