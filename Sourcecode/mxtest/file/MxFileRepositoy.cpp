@@ -13,7 +13,7 @@ namespace mxtest
 {
 
     MxFileRepository::MxFileRepository()
-    : myPath{ RESOURCES_DIRECTORY_PATH }
+    : myPath{ mxtest::getResourcesDirectoryPath() }
     , mySeparator{ FILE_PATH_SEPARATOR }
     , myExpectedLoadFailures{}
     , myNameSubdirectoryMap{}
