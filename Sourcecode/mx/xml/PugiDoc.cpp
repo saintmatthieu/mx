@@ -202,7 +202,7 @@ namespace mx
         void PugiDoc::loadFile( const std::string& filename )
         {
             std::ifstream infile( filename.c_str() );
-            if( !infile.is_open() )
+            if( !infile.is_open() || infile.bad() || !infile.good() || infile.fail() )
             {
                 std::string message = std::string{ "error opening input file: " } + filename;
                 throw std::runtime_error( message );
@@ -216,7 +216,7 @@ namespace mx
         void PugiDoc::saveFile( const std::string& filename ) const
         {
             std::ofstream outfile( filename.c_str() );
-            if( !outfile.is_open() )
+            if( !outfile.is_open() || outfile.bad() || !outfile.good() || outfile.fail()  )
             {
                 std::string message = std::string{ "error opening file for writing: " } + filename;
                 throw std::runtime_error( message );
