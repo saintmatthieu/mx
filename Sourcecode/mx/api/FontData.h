@@ -94,11 +94,7 @@ namespace mx
         MXAPI_EQUALS_MEMBER( sizeCss )
         MXAPI_EQUALS_MEMBER( style )
         MXAPI_EQUALS_MEMBER( weight )
-        if( ! areVectorsEqual( lhs.fontFamily, rhs.fontFamily ) )
-        {
-            streamComparisonUnequalMessage( "FontData", "fontFamily" );
-            return false;
-        }
+        MXAPI_EQUALS_MEMBER( fontFamily )
         MXAPI_EQUALS_MEMBER( underline )
         MXAPI_EQUALS_MEMBER( overline )
         MXAPI_EQUALS_MEMBER( lineThrough )

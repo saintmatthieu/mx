@@ -20,6 +20,10 @@ namespace mx
 // items are found to be not-equal.  This cout stream was necessary for testing during development.                              //
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+        // undef this compile-time constant to silence equality logging
+        // or def this compile-time constant to see the logging
+        // #define MX_API_LOG_INEQUALITY
+        
         template <typename T>
         inline bool areVectorsEqual( const std::vector<T>& lhs, const std::vector<T>& rhs )
         {
@@ -72,6 +76,8 @@ namespace mx
             return areSame( lhs, rhs );
         }
 
+#ifdef MX_API_LOG_INEQUALITY
+
         inline void streamComparisonUnequalMessage( const char* const inClassName, const char* const inMemberName )
         {
             std::cout << inClassName;
@@ -81,29 +87,50 @@ namespace mx
             std::cout << std::endl;
         }
         
+#endif
+        
 #define MXAPI_EQUALS_BEGIN( mxapiClassName ) \
         inline bool operator==( const mxapiClassName& lhs, const mxapiClassName& rhs ) \
         { \
-            const char* const theCurrentClassName = #mxapiClassName;
+            const char* const theCurrentClassName = #mxapiClassName; \
+            do { (void)(theCurrentClassName); } while (0); \
 
-#define MXAPI_EQUALS_MEMBER( mxapiMemberName ) \
-        if( ! ( lhs.mxapiMemberName == rhs.mxapiMemberName ) ) \
-        { \
-            streamComparisonUnequalMessage( theCurrentClassName, #mxapiMemberName ); \
-            return false; \
-        }
+#ifdef MX_API_LOG_INEQUALITY
 
-#define MXAPI_DOUBLES_EQUALS_MEMBER( mxapiMemberName ) \
-        if( std::abs( lhs.mxapiMemberName - rhs.mxapiMemberName ) > MX_API_EQUALITY_EPSILON ) \
-        { \
-            streamComparisonUnequalMessage( theCurrentClassName, #mxapiMemberName ); \
-            return false; \
-        }
+    #define MXAPI_EQUALS_MEMBER( mxapiMemberName ) \
+            if( ! ( lhs.mxapiMemberName == rhs.mxapiMemberName ) ) \
+            { \
+                streamComparisonUnequalMessage( theCurrentClassName, #mxapiMemberName ); \
+                return false; \
+            }
+        
+    #define MXAPI_DOUBLES_EQUALS_MEMBER( mxapiMemberName ) \
+            if( std::abs( lhs.mxapiMemberName - rhs.mxapiMemberName ) > MX_API_EQUALITY_EPSILON ) \
+            { \
+                streamComparisonUnequalMessage( theCurrentClassName, #mxapiMemberName ); \
+                return false; \
+            }
+
+#else
+        
+    #define MXAPI_EQUALS_MEMBER( mxapiMemberName ) \
+            if( ! ( lhs.mxapiMemberName == rhs.mxapiMemberName ) ) \
+            { \
+                return false; \
+            }
+        
+    #define MXAPI_DOUBLES_EQUALS_MEMBER( mxapiMemberName ) \
+            if( std::abs( lhs.mxapiMemberName - rhs.mxapiMemberName ) > MX_API_EQUALITY_EPSILON ) \
+            { \
+                return false; \
+            }
+
+#endif
 
 #define MXAPI_EQUALS_END \
         return true; \
     }\
-        
+
 #define MXAPI_NOT_EQUALS_AND_VECTORS( mxapiClassName ) \
         inline bool operator!=( const mxapiClassName& lhs, const mxapiClassName& rhs ) { return !( lhs == rhs ); } \
         inline bool operator==( const std::vector<mxapiClassName>& lhs, const std::vector<mxapiClassName>& rhs ) { return areVectorsEqual<mxapiClassName>( lhs, rhs ); } \
