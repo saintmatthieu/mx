@@ -15,7 +15,7 @@ namespace mx
         static const unsigned int standardOptions = pugi::parse_default | pugi::parse_declaration | pugi::parse_doctype | pugi::parse_pi;
 
         PugiDoc::PugiDoc()
-            : myDoc()
+            : myDoc( std::make_unique<pugi::xml_document>() )
             , myXmlVersion( DEFAULT_XML_VERSION )
             , myEncoding( DEFAULT_ENCODING )
             , myIsStandalone( false )
@@ -23,7 +23,7 @@ namespace mx
         {
             std::istringstream is( R"(<?xml version="1.0" encoding="UTF-8"?><root/>)" );
             auto options = standardOptions;
-            myDoc.load( is, options );
+            myDoc->load( is, options );
         }
 
         // Don't look at me, I'm ugly.
@@ -31,7 +31,7 @@ namespace mx
         void PugiDoc::loadStream( std::istream& is )
         {
             auto options = standardOptions;
-            auto parseResult = myDoc.load( is, options );
+            auto parseResult = myDoc->load( is, options );
             if( parseResult.status != pugi::status_ok )
             {
                 std::stringstream ss;
@@ -104,13 +104,13 @@ namespace mx
                 ss << " - " << parseResult.description();
                 MX_THROW( ss.str() );
             }
-            else if( myDoc.begin() == myDoc.end() )
+            else if( myDoc->begin() == myDoc->end() )
             {
                 MX_THROW( "pugixml parse created an empty document" );
             }
-            else if( myDoc.begin()->type() != pugi::node_declaration )
+            else if( myDoc->begin()->type() != pugi::node_declaration )
             {
-                auto xmlDeclaration = myDoc.prepend_child( pugi::node_declaration );
+                auto xmlDeclaration = myDoc->prepend_child( pugi::node_declaration );
                 xmlDeclaration.set_name( "xml" );
                 auto ver = xmlDeclaration.append_attribute( "version" );
                 ver.set_value( "1.0" );
@@ -119,7 +119,7 @@ namespace mx
             }
             else
             {
-                auto xmlDec = *( myDoc.begin() );
+                auto xmlDec = *( myDoc->begin() );
                 if( xmlDec.attributes_begin() == xmlDec.attributes_end() )
                 {
                     auto attr = xmlDec.append_attribute( "version" );
@@ -195,7 +195,7 @@ namespace mx
             }
             
             pugi::xml_writer_stream writer( os );
-            myDoc.save( writer, "  ", flags, pugiEncoding );
+            myDoc->save( writer, "  ", flags, pugiEncoding );
         }
 
 
@@ -239,17 +239,17 @@ namespace mx
             {
                 MX_THROW( "cannot set the XmlVersion to 'unknown'" );
             }
-            if( myDoc.begin() == myDoc.end() )
+            if( myDoc->begin() == myDoc->end() )
             {
                 MX_THROW( "the xml document does not have an xml declaration - bad state" );
             }
-            else if ( myDoc.begin()->type() != pugi::node_declaration )
+            else if ( myDoc->begin()->type() != pugi::node_declaration )
             {
                 MX_THROW( "the first node in the xml document should be an xml declaration - bad state" );
             }
             else
             {
-                auto node = *( myDoc.begin() );
+                auto node = *( myDoc->begin() );
                 if( node.attributes_begin() == node.attributes_end() )
                 {
                     node.prepend_attribute( "version" );
@@ -411,26 +411,26 @@ namespace mx
             else if ( value )
             {
                 // add doctype
-                if( myDoc.begin() == myDoc.end() )
+                if( myDoc->begin() == myDoc->end() )
                 {
                     MX_THROW( "empty documet" );
                 }
-                auto xmlDeclarationNode = *( myDoc.begin() );
+                auto xmlDeclarationNode = *( myDoc->begin() );
                 if( xmlDeclarationNode.type() != pugi::node_declaration )
                 {
                     MX_THROW( "bad xml document state" );
                 }
-                myDoc.insert_child_after( pugi::node_doctype, xmlDeclarationNode );
+                myDoc->insert_child_after( pugi::node_doctype, xmlDeclarationNode );
                 return;
             }
             else if ( !value )
             {
                 // delete doctype
-                for( auto it = myDoc.begin(); it != myDoc.end(); ++it )
+                for( auto it = myDoc->begin(); it != myDoc->end(); ++it )
                 {
                     if( it->type() == pugi::node_doctype )
                     {
-                        myDoc.remove_child( *it );
+                        myDoc->remove_child( *it );
                         return;
                     }
                 }
@@ -455,8 +455,8 @@ namespace mx
         
         XElementPtr PugiDoc::getRoot() const
         {
-            for( auto it = myDoc.begin();
-                 it != myDoc.end(); ++ it )
+            for( auto it = myDoc->begin();
+                 it != myDoc->end(); ++ it )
             {
                 if( it->type() == pugi::node_element )
                 {
@@ -528,13 +528,13 @@ namespace mx
         
         pugi::xml_node PugiDoc::getDoctypeNode() const
         {
-            if( myDoc.empty() )
+            if( myDoc->empty() )
             {
                 return pugi::xml_node{};
             }
             
-            auto childrenIter = myDoc.begin();
-            if( childrenIter == myDoc.end() )
+            auto childrenIter = myDoc->begin();
+            if( childrenIter == myDoc->end() )
             {
                 return pugi::xml_node{};
             }
@@ -542,7 +542,7 @@ namespace mx
             {
                 ++childrenIter;
             }
-            if( childrenIter == myDoc.end() ||
+            if( childrenIter == myDoc->end() ||
                 childrenIter->type() != pugi::node_doctype )
             {
                 return pugi::xml_node{};
@@ -553,12 +553,12 @@ namespace mx
         
         pugi::xml_node PugiDoc::getXmlDeclarationNode() const
         {
-            if( myDoc.empty() )
+            if( myDoc->empty() )
             {
                 return pugi::xml_node{};
             }
             
-            auto firstNode = myDoc.first_child();
+            auto firstNode = myDoc->first_child();
             
             if( firstNode.type() != pugi::node_declaration )
             {

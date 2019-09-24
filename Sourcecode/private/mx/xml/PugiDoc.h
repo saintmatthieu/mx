@@ -6,6 +6,7 @@
 
 #include "mx/xml/XDoc.h"
 #include "mx/pugixml/pugixml.hpp"
+#include <memory>
 
 namespace mx
 {
@@ -53,7 +54,7 @@ namespace mx
             virtual void setDoWriteByteOrderMark( bool value ) override;
 
         private:
-            pugi::xml_document myDoc;
+            std::unique_ptr<pugi::xml_document> myDoc;
             XmlVersion myXmlVersion;
             Encoding myEncoding;
             bool myIsStandalone;
