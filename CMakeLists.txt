@@ -1,6 +1,14 @@
 cmake_minimum_required(VERSION 3.7.2)
 project(mx)
 
+if(MSVC)
+    set(CMAKE_CXX_FLAGS_DEBUG   "/MTd /Zi /Ob0 /Od /RTC1 /D_DEBUG ")
+    set(CMAKE_CXX_FLAGS_RELEASE "/MT /O2 /Ob2 /D NDEBUG")
+    set(CMAKE_C_FLAGS_DEBUG     "/MTd /Zi /Ob0 /Od /RTC1 /D_DEBUG ")
+    set(CMAKE_C_FLAGS_RELEASE   "/MT /O2 /Ob2 /D NDEBUG")
+endif()
+set(CMAKE_INSTALL_PREFIX ${CMAKE_SOURCE_DIR}/_deploy)
+
 include(GNUInstallDirs)
 include(CMakePackageConfigHelpers)
 set(CPP_VERSION 17)
@@ -45,6 +53,7 @@ source_group( "impl" FILES ${SRC_MX_IMPL} )
 source_group( "utility" FILES ${SRC_MX_UTILITY} )
 source_group( "ezxml" FILES ${SRC_MX_EZXML} )
 set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD ${CPP_VERSION})
+set_property(TARGET ${PROJECT_NAME} PROPERTY OUTPUT_NAME ${PROJECT_NAME}$<$<CONFIG:Debug>:_d>)
 
 target_include_directories(${PROJECT_NAME} PRIVATE ${PRIVATE_DIR})
 
